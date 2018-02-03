@@ -57,17 +57,17 @@ public class BoardActivity extends AppCompatActivity
         switch ( event.getAction() ) {
             case MotionEvent.ACTION_MOVE:
                 Log.d ( "onTouch", "ACTION_MOVE" );
-                int diffX = offsetX - x;
-                int diffY = offsetY - y;
 
-                currentX -= diffX;
-                currentY -= diffY;
+                int diffX = offsetX - x;    int diffY = offsetY - y;
+
+                currentX -= diffX;  currentY -= diffY;
 
                 v.layout ( currentX, currentY,
                         currentX + v.getWidth(),
                         currentY + v.getHeight() );
-                offsetX = x;
-                offsetY = y;
+
+                offsetX = x;    offsetY = y;
+
 
                 break;
 

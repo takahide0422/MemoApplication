@@ -1,10 +1,12 @@
 package com.takahide.memoapplication.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity
 
 
     void initButton () {
+        Log.d ( "mainActivity", "initButton" );
         MemoObject memo = MemoObject.createInstance ( this, layout );
         memo.setText ( "動的ボタン" );
         memo.setOnTouchListener ( memo );
@@ -67,5 +70,14 @@ public class MainActivity extends AppCompatActivity
     public void onClick ( View v ) {
         Log.d ( "mainActivity", "onClick" );
         Snackbar.make ( layout, "button pushed", Snackbar.LENGTH_SHORT ).show();
+    }
+
+
+    @Override
+    public View onCreateView ( String name, Context context, AttributeSet attrs ) {
+        super.onCreateView ( name, context, attrs );
+
+        Log.d ( "mainActivity", "onCreateView" );
+        return super.onCreateView ( name, context, attrs );
     }
 }
