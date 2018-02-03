@@ -1,4 +1,4 @@
-package com.takahide.memoapplication;
+package com.takahide.memoapplication.view;
 
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -12,6 +12,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.takahide.memoapplication.MemoObject;
+import com.takahide.memoapplication.R;
 
 /**
  * Created by Hide on 2018/02/01.
