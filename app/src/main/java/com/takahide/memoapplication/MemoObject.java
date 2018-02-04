@@ -17,7 +17,7 @@ import android.widget.RelativeLayout;
 public class MemoObject extends AppCompatTextView
         implements View.OnTouchListener {
 
-    static RelativeLayout layout;
+    private RelativeLayout.LayoutParams memoLayoutParams;
 
     private final static int DEFAULT_WIDTH = 300;
     private final static int DEFAULT_HEIGHT = 100;
@@ -38,28 +38,27 @@ public class MemoObject extends AppCompatTextView
 
 
 
-    public static MemoObject createInstance ( Context context, RelativeLayout layout ) {
-        Log.d ( "memoObject", "create the new memoObject" );
-        MemoObject memoObject = new MemoObject ( context );
-        if (memoObject.putX != 0 || memoObject.putY != 0) {
-            memoObject.setX ( memoObject.putX );
-            memoObject.setY ( memoObject.putY );
+    public void setupInstance ( Context context ) {
+        log ( "Set up the memoObject" );
+
+        memoLayoutParams = new RelativeLayout.LayoutParams ( DEFAULT_WIDTH, DEFAULT_HEIGHT );
+
+        if (this.putX != 0 || this.putY != 0) {
+            this.setX ( this.putX );
+            this.setY ( this.putY );
         } else {
-            memoObject.setX(DEFAULT_X);
-            memoObject.setY(DEFAULT_Y);
+            this.setX(DEFAULT_X);
+            this.setY(DEFAULT_Y);
         }
-        memoObject.setWidth ( DEFAULT_WIDTH );  memoObject.setHeight ( DEFAULT_HEIGHT );
+        
+        this.setBackgroundColor (Color.GREEN );
 
-        memoObject.setBackgroundColor (Color.GREEN );
-
-        memoObject.layout (
-                memoObject.putX, memoObject.putY,
-                memoObject.putX + memoObject.getWidth(),
-                memoObject.putY + memoObject.getHeight()
-        );
-
-        return memoObject;
+        this.setLayoutParams ( memoLayoutParams );
     }
+
+
+
+
 
 
 
@@ -128,14 +127,6 @@ public class MemoObject extends AppCompatTextView
         return false;
     }
 
-    View.OnClickListener clickListener = new View.OnClickListener () {
-        @Override
-        public void onClick ( View v ) {
-            Log.d ( "onClick", "onClick" );
-
-            Snackbar.make ( layout, "button pushed", Snackbar.LENGTH_SHORT );
-        }
-    };
 
 
 
@@ -144,6 +135,9 @@ public class MemoObject extends AppCompatTextView
 
 
 
+    void log ( String msg ) {
+        Log.d ( "memoObject", msg );
+    }
 
     public MemoObject ( Context context ) {
         super ( context );
