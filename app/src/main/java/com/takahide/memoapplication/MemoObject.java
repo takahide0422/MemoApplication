@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 public class MemoObject extends AppCompatTextView
         implements View.OnTouchListener {
 
+    private RelativeLayout layout;
     private RelativeLayout.LayoutParams memoLayoutParams;
 
     private final static int DEFAULT_WIDTH = 300;
@@ -38,8 +39,10 @@ public class MemoObject extends AppCompatTextView
 
 
 
-    public void setupInstance ( Context context ) {
+    public void setupInstance ( Context context, RelativeLayout layout ) {
         log ( "Set up the memoObject" );
+
+        this.layout = layout;
 
         memoLayoutParams = new RelativeLayout.LayoutParams ( DEFAULT_WIDTH, DEFAULT_HEIGHT );
 
@@ -101,6 +104,8 @@ public class MemoObject extends AppCompatTextView
             case MotionEvent.ACTION_DOWN:
                 Log.d ( "onTouch", "ACTION_DOWN" );
 
+                this.layout.removeView ( memo );
+                this.layout.addView ( memo );
                 currentX = memo.getLeft();  currentY = memo.getTop();
 
                 offsetX = x;    offsetY = y;

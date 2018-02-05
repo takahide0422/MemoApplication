@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity
     void initButton () {
         Log.d ( "mainActivity", "initButton" );
         MemoObject memo = new MemoObject( this );
-        memo.setupInstance ( this );
+        memo.setupInstance ( this, layout );
         memo.setText ( "動的ボタン" );
         memo.setOnTouchListener ( memo );
         memo.setOnClickListener ( objectClickListener );
