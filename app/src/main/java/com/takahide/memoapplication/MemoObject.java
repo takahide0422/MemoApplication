@@ -15,7 +15,7 @@ import android.widget.RelativeLayout;
  */
 
 public class MemoObject extends AppCompatTextView
-        implements View.OnTouchListener {
+        implements View.OnTouchListener, View.OnClickListener {
 
     private RelativeLayout layout;
     private RelativeLayout.LayoutParams memoLayoutParams;
@@ -126,6 +126,7 @@ public class MemoObject extends AppCompatTextView
                     return true;
                 }
         }
+        log ( "test" );
         return false;
     }
 
@@ -134,10 +135,23 @@ public class MemoObject extends AppCompatTextView
 
 
 
+    @Override
+    public void onClick ( View v ) {
+        log ( "onClick" );
+        Snackbar.make ( layout, "pushed Button", Snackbar.LENGTH_SHORT ).show();
+    }
+
+//    @Override
+//    public boolean onLongClick ( View v ) {
+//        log ( "onLongClick" );
+//        Snackbar.make ( layout, "button pushed", Snackbar.LENGTH_SHORT ).show();
+//        layout.removeView ( v );
+//        return true;
+//    }
 
 
 
-    void log ( String msg ) {
+    public static void log ( String msg ) {
         Log.d ( "memoObject", msg );
     }
 

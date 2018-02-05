@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity
         setContentView ( R.layout.activity_main );
 
 
-        Log.d ( "mainActivity", "creating the MainActivity" );
+        log ( "creating the MainActivity" );
 
         layout = (RelativeLayout) findViewById ( R.id.layout );
 
@@ -48,19 +48,19 @@ public class MainActivity extends AppCompatActivity
         toolbar.inflateMenu( R.menu.toolbar_menu );
         toolbar.setOnMenuItemClickListener ( this );
 
-        ( (Button) findViewById ( R.id.button ) ).setOnClickListener ( buttonClickListener );
-
         initButton();
     }
 
 
     void initButton () {
-        Log.d ( "mainActivity", "initButton" );
-        MemoObject memo = new MemoObject( this );
+        log ( "initButton" );
+
+        MemoObject memo = new MemoObject ( this );
         memo.setupInstance ( this, layout );
         memo.setText ( "動的ボタン" );
         memo.setOnTouchListener ( memo );
-        memo.setOnClickListener ( objectClickListener );
+        memo.setOnClickListener ( memo );
+//        memo.setOnLongClickListener ( memo );
         layout.addView ( memo );
     }
 
@@ -80,26 +80,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    View.OnClickListener buttonClickListener = new View.OnClickListener () {
-        @Override
-        public void onClick ( View v ) {
-        }
-    };
-
-    View.OnClickListener objectClickListener = new View.OnClickListener () {
-        @Override
-        public void onClick ( View v ) {
-            Log.d ( "mainActivity", "onClick" );
-            Snackbar.make ( layout, "button pushed", Snackbar.LENGTH_SHORT ).show();
-        }
-    };
-
-
-    @Override
-    public View onCreateView ( String name, Context context, AttributeSet attrs ) {
-        super.onCreateView ( name, context, attrs );
-
-        Log.d ( "mainActivity", "onCreateView" );
-        return super.onCreateView ( name, context, attrs );
+    void log ( String msg ) {
+        Log.d ( "mainActivity", msg );
     }
 }
