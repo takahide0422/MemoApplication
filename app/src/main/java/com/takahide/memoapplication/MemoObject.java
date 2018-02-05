@@ -43,14 +43,8 @@ public class MemoObject extends AppCompatTextView
 
         memoLayoutParams = new RelativeLayout.LayoutParams ( DEFAULT_WIDTH, DEFAULT_HEIGHT );
 
-        if (this.putX != 0 || this.putY != 0) {
-            this.setX ( this.putX );
-            this.setY ( this.putY );
-        } else {
-            this.setX(DEFAULT_X);
-            this.setY(DEFAULT_Y);
-        }
-        
+        memoLayoutParams.setMargins ( this.putX, this.putY, 0, 0 );
+
         this.setBackgroundColor (Color.GREEN );
 
         this.setLayoutParams ( memoLayoutParams );
@@ -118,6 +112,9 @@ public class MemoObject extends AppCompatTextView
 
                 Log.d ( "onTouch", "ACTION_UP : x = " + getX() + ", y = " + getY() );
                 memo.setPutX ( (int) memo.getX() );   memo.setPutY ( (int) memo.getY() );
+                memoLayoutParams.setMargins ( this.putX, this.putY, 0, 0 );
+                memo.setLayoutParams ( memoLayoutParams );
+
 
                 if ( recentMotion != MotionEvent.ACTION_DOWN ) {
                     recentMotion = MotionEvent.ACTION_UP;

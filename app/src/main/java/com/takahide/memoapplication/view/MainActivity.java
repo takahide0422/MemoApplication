@@ -23,36 +23,50 @@ import com.takahide.memoapplication.R;
  */
 
 public class MainActivity extends AppCompatActivity
-    implements Toolbar.OnMenuItemClickListener, View.OnClickListener {
+    implements Toolbar.OnMenuItemClickListener {
 
     private Toolbar toolbar;
 
     private RelativeLayout layout;
+
 
     @Override
     protected void onCreate (Bundle savedInstanceState ) {
         super.onCreate ( savedInstanceState );
         setContentView ( R.layout.activity_main );
 
+
         Log.d ( "mainActivity", "creating the MainActivity" );
 
+        layout = (RelativeLayout) findViewById ( R.id.layout );
+
+        setupView();
+    }
+
+    void setupView () {
         toolbar = (Toolbar) findViewById ( R.id.toolbar );
         toolbar.inflateMenu( R.menu.toolbar_menu );
         toolbar.setOnMenuItemClickListener ( this );
 
-        layout = (RelativeLayout) findViewById ( R.id.layout );
+        ( (Button) findViewById ( R.id.button ) ).setOnClickListener ( buttonClickListener );
+
         initButton();
     }
 
 
     void initButton () {
         Log.d ( "mainActivity", "initButton" );
-        MemoObject memo = MemoObject.createInstance ( this, layout );
+        MemoObject memo = new MemoObject( this );
+        memo.setupInstance ( this );
         memo.setText ( "動的ボタン" );
         memo.setOnTouchListener ( memo );
-        memo.setOnClickListener ( this );
+        memo.setOnClickListener ( objectClickListener );
         layout.addView ( memo );
     }
+
+
+
+
 
 
 
@@ -66,11 +80,19 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public void onClick ( View v ) {
-        Log.d ( "mainActivity", "onClick" );
-        Snackbar.make ( layout, "button pushed", Snackbar.LENGTH_SHORT ).show();
-    }
+    View.OnClickListener buttonClickListener = new View.OnClickListener () {
+        @Override
+        public void onClick ( View v ) {
+        }
+    };
+
+    View.OnClickListener objectClickListener = new View.OnClickListener () {
+        @Override
+        public void onClick ( View v ) {
+            Log.d ( "mainActivity", "onClick" );
+            Snackbar.make ( layout, "button pushed", Snackbar.LENGTH_SHORT ).show();
+        }
+    };
 
 
     @Override
