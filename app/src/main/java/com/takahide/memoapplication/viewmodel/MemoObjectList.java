@@ -1,4 +1,4 @@
-package com.takahide.memoapplication.model;
+package com.takahide.memoapplication.viewmodel;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,8 +9,11 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import com.takahide.memoapplication.R;
 
 import java.util.ArrayList;
 
@@ -25,7 +28,7 @@ public class MemoObjectList {
     private RelativeLayout layout;
 
     private final static int DEFAULT_WIDTH = 300;
-    private final static int DEFAULT_HEIGHT = 100;
+    private final static int DEFAULT_HEIGHT = 200;
 
     private final static int DEFAULT_X = 0;
     private final static int DEFAULT_Y = 0;
@@ -70,6 +73,11 @@ public class MemoObjectList {
         public void setPutY ( int y ) { this.putY = y; }
         public int getPutY () { return this.putY; }
 
+        private final static int PADDING_VERTICAL = 10;
+        private final static int PADDING_HORIZONTAL = 30;
+
+
+
 
         MemoObject setupNewInstance () {
             Log.d ( "MemoObject", "Create New MemoObject" );
@@ -77,10 +85,16 @@ public class MemoObjectList {
             memoLayoutParams = new RelativeLayout.LayoutParams ( DEFAULT_WIDTH, DEFAULT_HEIGHT );
             memoLayoutParams.setMargins ( this.putX, this.putY, 0, 0 );
 
-            this.setBackgroundColor ( Color.GREEN );
+            this.setBackgroundColor ( R.drawable.memo_drawable );
             this.setLayoutParams ( memoLayoutParams );
-            this.setOnClickListener ( this );
-            this.setOnTouchListener ( this );
+            this.setPadding ( PADDING_HORIZONTAL, PADDING_VERTICAL, PADDING_HORIZONTAL, PADDING_VERTICAL );
+
+            this.setMinWidth ( 100 );   this.setMinHeight ( 100 );
+
+            this.setTextColor ( Color.WHITE );
+
+            this.setOnClickListener ( this );   this.setOnTouchListener ( this );
+
             return this;
         }
 
