@@ -3,7 +3,6 @@ package com.takahide.memoapplication.viewmodel;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -11,7 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
+
 
 import com.takahide.memoapplication.R;
 
@@ -82,16 +81,20 @@ public class MemoObjectList {
         MemoObject setupNewInstance () {
             Log.d ( "MemoObject", "Create New MemoObject" );
 
-            memoLayoutParams = new RelativeLayout.LayoutParams ( DEFAULT_WIDTH, DEFAULT_HEIGHT );
+            memoLayoutParams = new RelativeLayout.LayoutParams (
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
             memoLayoutParams.setMargins ( this.putX, this.putY, 0, 0 );
 
-            this.setBackgroundColor ( R.drawable.memo_drawable );
+            this.setBackgroundResource ( R.drawable.memo_drawable );
             this.setLayoutParams ( memoLayoutParams );
             this.setPadding ( PADDING_HORIZONTAL, PADDING_VERTICAL, PADDING_HORIZONTAL, PADDING_VERTICAL );
 
-            this.setMinWidth ( 100 );   this.setMinHeight ( 100 );
+            this.setMinWidth ( 200 );   this.setMinHeight ( 150 );
 
             this.setTextColor ( Color.WHITE );
+            this.setText ( "Text" );
 
             this.setOnClickListener ( this );   this.setOnTouchListener ( this );
 
