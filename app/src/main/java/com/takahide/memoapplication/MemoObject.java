@@ -51,6 +51,9 @@ public class MemoObject extends AppCompatTextView
         this.setBackgroundColor (Color.GREEN );
 
         this.setLayoutParams ( memoLayoutParams );
+
+        this.setOnClickListener ( this );
+        this.setOnTouchListener ( this );
     }
 
 

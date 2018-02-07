@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.takahide.memoapplication.MemoObject;
 import com.takahide.memoapplication.R;
+import com.takahide.memoapplication.model.MemoObjectList;
 
 /**
  * Created by Hide on 2018/02/01.
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity
     private Toolbar toolbar;
 
     private RelativeLayout layout;
+
+    private MemoObjectList memoObjects;
 
 
     @Override
@@ -48,6 +51,8 @@ public class MainActivity extends AppCompatActivity
         toolbar.inflateMenu( R.menu.toolbar_menu );
         toolbar.setOnMenuItemClickListener ( this );
 
+        memoObjects = new MemoObjectList ( this, layout );
+
         initButton();
     }
 
@@ -55,13 +60,12 @@ public class MainActivity extends AppCompatActivity
     void initButton () {
         log ( "initButton" );
 
-        MemoObject memo = new MemoObject ( this );
-        memo.setupInstance ( this, layout );
-        memo.setText ( "動的ボタン" );
-        memo.setOnTouchListener ( memo );
-        memo.setOnClickListener ( memo );
-//        memo.setOnLongClickListener ( memo );
-        layout.addView ( memo );
+        memoObjects.createNewMemoObject();
+
+//        MemoObject memo = new MemoObject ( this );
+//        memo.setupInstance ( this, layout );
+//        memo.setText ( "動的ボタン" );
+//        layout.addView ( memo );
     }
 
 
