@@ -2,6 +2,8 @@ package com.takahide.memoapplication.viewmodel;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
@@ -15,12 +17,14 @@ import android.widget.RelativeLayout;
 import com.takahide.memoapplication.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by JavaQuest on 2018/02/06.
  */
 
 public class MemoObjectList {
+//    implements Parcelable {
 
     private Context context;
 
@@ -33,7 +37,6 @@ public class MemoObjectList {
     private final static int DEFAULT_Y = 0;
 
 
-    MemoObject memoObject;
     ArrayList<MemoObject> memoList;
 
     public MemoObjectList ( Context context, RelativeLayout layout ) {
@@ -43,10 +46,10 @@ public class MemoObjectList {
         memoList = new ArrayList<>();
     }
 
-    public void createNewMemoObject () {
+    public void createNewMemoObject ( String text ) {
         memoList.add (
                 memoList.size(),
-                new MemoObject( context ).setupNewInstance( )
+                new MemoObject( context ).setupNewInstance( text )
                 );
         layout.addView (
                 memoList.get ( memoList.size() - 1 )
@@ -54,8 +57,17 @@ public class MemoObjectList {
     }
 
 
+
+
+
+
+
+
+
+
+
     /**
-     *  MemoObjectクラス
+     *  MemoObject インナークラス
      */
     private class MemoObject extends AppCompatTextView
         implements View.OnTouchListener, View.OnClickListener {
@@ -65,20 +77,18 @@ public class MemoObjectList {
         // オブジェクトの配置 x軸（左端）
         private int putX = DEFAULT_X;
         public void setPutX ( int x ) { this.putX = x; }
-        public int getPutX () { return this.putX; }
 
         // オブジェクトの配置 y軸（上端）
         private int putY = DEFAULT_Y;
         public void setPutY ( int y ) { this.putY = y; }
-        public int getPutY () { return this.putY; }
 
-        private final static int PADDING_VERTICAL = 10;
+        private final static int PADDING_VERTICAL = 20;
         private final static int PADDING_HORIZONTAL = 30;
 
 
 
 
-        MemoObject setupNewInstance () {
+        MemoObject setupNewInstance ( String text ) {
             Log.d ( "MemoObject", "Create New MemoObject" );
 
             memoLayoutParams = new RelativeLayout.LayoutParams (
@@ -91,10 +101,11 @@ public class MemoObjectList {
             this.setLayoutParams ( memoLayoutParams );
             this.setPadding ( PADDING_HORIZONTAL, PADDING_VERTICAL, PADDING_HORIZONTAL, PADDING_VERTICAL );
 
-            this.setMinWidth ( 200 );   this.setMinHeight ( 150 );
+            this.setMinWidth ( 200 );   this.setMaxWidth ( 700 );
+            this.setMinHeight ( 150 );
 
             this.setTextColor ( Color.WHITE );
-            this.setText ( "Text" );
+            this.setText ( text );
 
             this.setOnClickListener ( this );   this.setOnTouchListener ( this );
 
@@ -103,18 +114,13 @@ public class MemoObjectList {
 
 
 
-        // タッチ時のx軸（View左端）
-        int currentX;
-        // タッチ時のy軸（View上端）
-        int currentY;
+        int currentX;       // タッチ時のx軸（View左端）
+        int currentY;       // タッチ時のy軸（View上端）
 
-        // 画面タッチ位置 x軸
-        int offsetX;
-        // 画面タッチ位置 y軸
-        int offsetY;
+        int offsetX;        // 画面タッチ位置 x軸
+        int offsetY;        // 画面タッチ位置 y軸
 
-        // 直近のMotionEvent
-        int recentMotion;
+        int recentMotion;   // 直近のMotionEvent
 
         @Override
         public boolean onTouch ( View v, MotionEvent event ) {
@@ -177,20 +183,11 @@ public class MemoObjectList {
             Snackbar.make ( layout, "Click the Button", Snackbar.LENGTH_SHORT ).show();
         }
 
-//        @Override
-//        public boolean onLongClick ( View v ) {
-//            Log.d ( "MemoObject", "onLongClick" );
-//            Snackbar.make ( layout, "Long Click the button", Snackbar.LENGTH_SHORT ).show();
-//            layout.removeView ( v );
-//            return true;
-//        }
-
-
-
         MemoObject ( Context context ) { super( context ); }
         MemoObject ( Context context, AttributeSet attrs ) { super ( context, attrs ); }
         MemoObject ( Context context, AttributeSet attrs, int defStyle ) {
             super( context, attrs, defStyle );
         }
-    }
+
+    }   // MemoObjectクラス
 }
