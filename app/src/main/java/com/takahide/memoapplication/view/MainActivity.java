@@ -25,7 +25,12 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
 
     private RelativeLayout layout;
+//    public static int windowWidth;
+//    public static int windowHeight;
+
     private InputMethodManager imm;
+
+
 
     private MemoObjectList memoObjects;
 
@@ -77,6 +82,15 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
     }
+
+
+//    @Override
+//    public void onWindowFocusChanged ( boolean hasFocus ) {
+//        super.onWindowFocusChanged ( hasFocus );
+//
+//        windowWidth = layout.getWidth();
+//        windowHeight = layout.getHeight();
+//    }
 
 
 

@@ -40,20 +40,19 @@ public class MemoObjectList {
     private final static int DEFAULT_WIDTH = 300;
     private final static int DEFAULT_HEIGHT = 200;
 
-    private final static int DEFAULT_X = 0;
-    private final static int DEFAULT_Y = 0;
+    private final static int DEFAULT_X = 300;
+    private final static int DEFAULT_Y = 200;
 
 
     ArrayList<MemoObject> memoList;
 
     public MemoObjectList ( Context context, RelativeLayout layout ) {
-        Log.d ( "MemoObjectList", "Connect the MemoObject" );
         this.context = context;
         this.layout = layout;
-
         memoList = new ArrayList<>();
 
         readMemoData();
+        Log.d ( "MemoObjectList", "Connect the MemoObject" );
     }
 
     /**
@@ -204,11 +203,23 @@ public class MemoObjectList {
 
             switch ( event.getAction() ) {
                 case MotionEvent.ACTION_MOVE:
-                    Log.d ( "onTouch", "ACTION_MOVE" );
-
                     int diffX = offsetX - x;    int diffY = offsetY - y;
 
                     currentX -= diffX;  currentY -= diffY;
+
+                    if ( currentX < 0 ) {
+                        currentX = 0;
+                    } else if ( currentX > (layout.getWidth() - memo.getWidth()) ) {
+                        currentX = layout.getWidth() -memo.getWidth();
+                    }
+
+                    if ( currentY < 0 ) {
+                        currentY = 0;
+                    } else if ( currentY > (layout.getHeight() - memo.getHeight()) ) {
+                        currentY = layout.getHeight() - memo.getHeight();
+                    }
+
+                    Log.d ( "onTouch", "ACTION_MOVE : currentX=" + currentX + " currentY=" + currentY );
 
                     memo.layout ( currentX, currentY,
                             currentX + memo.getWidth(),
@@ -257,8 +268,11 @@ public class MemoObjectList {
             return false;
         }
 
+        void setCurrentY ( MemoObject memo, int currentY ) {
+        }
+
         void updateMargin() {
-            String sql = MemoDatabase.getSQLForUpdateMargin ( this.memoNum, this.putX, this.putY );
+            String sql = MemoDatabase.createStringForUpdateMargin ( this.memoNum, this.putX, this.putY );
             db.execSQL ( sql );
         }
 
@@ -266,11 +280,19 @@ public class MemoObjectList {
         @Override
         public void onClick ( View v ) {
             Log.d ( "MemoObject", "onClick" );
-
+            Snackbar.make ( layout, "このメモを削除してよろしいですか？", Snackbar.LENGTH_LONG )
+                    .setAction ( "OK", new View.OnClickListener () {
+                        @Override
+                        public void onClick ( View v ) {
+                            deleteMemoAction ( v );
+                        }
+                    }).show();
         }
 
 
-        public void deleteMemoAction () {
+        public void deleteMemoAction ( View v ) {
+            String sql = MemoDatabase.createStringForUpdateComplete ( this.memoNum );
+            db.execSQL ( sql );
             layout.removeView ( this );
         }
 

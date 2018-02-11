@@ -59,13 +59,13 @@ public class MemoDatabase extends SQLiteOpenHelper {
     public static final String updateSQL = "UPDATE " + MEMO + " SET ";
 
     /** Viewの位置情報の更新 */
-    public static String getSQLForUpdateMargin ( int id, int margin_left, int margin_top ) {
+    public static String createStringForUpdateMargin ( int id, int margin_left, int margin_top ) {
         return updateSQL + MARGIN_L + " = " + margin_left + ", " + MARGIN_T + " = " + margin_top +
                 "\r\nWHERE " + ID + " = " + id;
     }
 
     /** Viewを非表示への変更 */
-    public static String getSQLForUpdateComplete ( int id ) {
+    public static String createStringForUpdateComplete ( int id ) {
         return updateSQL + COMPLETE + " = " + TRUE +
                 "\r\nWHERE " + ID + " = " + id;
     }
