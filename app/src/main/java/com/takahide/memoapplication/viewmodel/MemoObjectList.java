@@ -132,9 +132,9 @@ public class MemoObjectList {
 
 
         MemoObject setupExistingData ( int id, String body, int margin_left, int margin_top ) {
-            Log.d ( "MemoObject", "Set up the existing Data" );
+            Log.d ( "MemoObject", "Setup the existing Data" );
             this.memoNum = id;
-            return setupNewInstance ( body, margin_left, margin_top );
+            return setLayout ( body, margin_left, margin_top );
         }
 
 
@@ -146,8 +146,16 @@ public class MemoObjectList {
          * @return
          */
         MemoObject setupNewInstance ( String text, int margin_left, int margin_top ) {
-            Log.d ( "MemoObject", "Create New MemoObject" );
+            Log.d("MemoObject", "Create New MemoObject");
+            Cursor cursor = db.rawQuery ( MemoDatabase.countRow, null );
+            while ( cursor.moveToNext() ) {
+                this.memoNum = cursor.getInt ( cursor.getColumnIndex ( MemoDatabase.ROWS ) );
+            }
 
+            return setLayout ( text, margin_left, margin_top );
+        }
+
+        MemoObject setLayout ( String text, int margin_left, int margin_top ) {
             memoLayoutParams = new RelativeLayout.LayoutParams (
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
@@ -234,6 +242,13 @@ public class MemoObjectList {
                     memoLayoutParams.setMargins ( this.putX, this.putY, 0, 0 );
                     memo.setLayoutParams ( memoLayoutParams );
 
+                    try {
+                        updateMargin();
+                    } catch ( SQLException e ) {
+                        e.getStackTrace();
+                        Log.d ( "MemoObject", "ERROR : Update Margins" );
+                    }
+
                     if ( recentMotion != MotionEvent.ACTION_DOWN ) {
                         recentMotion = MotionEvent.ACTION_UP;
                         return true;
@@ -242,10 +257,21 @@ public class MemoObjectList {
             return false;
         }
 
+        void updateMargin() {
+            String sql = MemoDatabase.getSQLForUpdateMargin ( this.memoNum, this.putX, this.putY );
+            db.execSQL ( sql );
+        }
+
+
         @Override
         public void onClick ( View v ) {
             Log.d ( "MemoObject", "onClick" );
-            Snackbar.make ( layout, "Click the Button", Snackbar.LENGTH_SHORT ).show();
+
+        }
+
+
+        public void deleteMemoAction () {
+            layout.removeView ( this );
         }
 
         MemoObject ( Context context ) { super( context ); }

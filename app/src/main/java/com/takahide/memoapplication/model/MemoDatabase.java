@@ -24,6 +24,9 @@ public class MemoDatabase extends SQLiteOpenHelper {
     public static final String MARGIN_T = "margin_top";
     public static final String COMPLETE = "complete";
 
+    //行数取得用
+    public static final String ROWS = "rows";
+
     final String SQL_MEMO = "CREATE TABLE IF NOT EXISTS " + MEMO + " ( " +
             ID + " INTEGER NOT NULL PRIMARY KEY, " +
             BODY + " TEXT NOT NULL, " +
@@ -61,11 +64,16 @@ public class MemoDatabase extends SQLiteOpenHelper {
                 "\r\nWHERE " + ID + " = " + id;
     }
 
-    /** Viewの表示の可否変更 */
+    /** Viewを非表示への変更 */
     public static String getSQLForUpdateComplete ( int id ) {
         return updateSQL + COMPLETE + " = " + TRUE +
                 "\r\nWHERE " + ID + " = " + id;
     }
+
+
+
+
+
 
 
 
