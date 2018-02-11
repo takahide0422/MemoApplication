@@ -1,6 +1,9 @@
 package com.takahide.memoapplication.viewmodel;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -14,10 +17,12 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 
+import com.takahide.memoapplication.MyApplication;
 import com.takahide.memoapplication.R;
+import com.takahide.memoapplication.model.MemoDatabase;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+
 
 /**
  * Created by JavaQuest on 2018/02/06.
@@ -27,8 +32,10 @@ public class MemoObjectList {
 //    implements Parcelable {
 
     private Context context;
-
     private RelativeLayout layout;
+
+    private SQLiteDatabase db;
+
 
     private final static int DEFAULT_WIDTH = 300;
     private final static int DEFAULT_HEIGHT = 200;
@@ -43,19 +50,53 @@ public class MemoObjectList {
         Log.d ( "MemoObjectList", "Connect the MemoObject" );
         this.context = context;
         this.layout = layout;
+
         memoList = new ArrayList<>();
+
+        readMemoData();
     }
 
+    /**
+     * 新しくメモを作成する。
+     * @param text メモの内容
+     */
     public void createNewMemoObject ( String text ) {
-        memoList.add (
-                memoList.size(),
-                new MemoObject( context ).setupNewInstance( text )
-                );
-        layout.addView (
-                memoList.get ( memoList.size() - 1 )
-        );
+        MemoObject memo = new MemoObject( context ).setupNewInstance( text, DEFAULT_X, DEFAULT_Y );
+        memoList.add ( memoList.size(), memo );
+        layout.addView ( memo );
+        try {
+            db.execSQL(
+                    MemoDatabase.createInsertState ( text, (int) memo.getX(), (int) memo.getY() ) );
+        } catch ( SQLException e ) {
+            e.getStackTrace();
+            Log.d ( "MemoObjectList", "ERROR : Insert new Memo Data" );
+        }
     }
 
+
+    /**
+     * 起動時に既存のデータを取得
+     */
+    void readMemoData () {
+        db = new MemoDatabase ( context ).getWritableDatabase();
+
+        Cursor cursor = db.rawQuery (
+                MemoDatabase.selectSQL, null );
+
+        while ( cursor.moveToNext() ) {
+            Log.d ( "MemoObjectList", "Output the Data" );
+            int id = cursor.getInt ( cursor.getColumnIndex ( MemoDatabase.ID ) );
+            String body = cursor.getString ( cursor.getColumnIndex ( MemoDatabase.BODY ) );
+            int margin_left = cursor.getInt ( cursor.getColumnIndex ( MemoDatabase.MARGIN_L ) );
+            int margin_top = cursor.getInt ( cursor.getColumnIndex ( MemoDatabase.MARGIN_T ) );
+
+            MemoObject memo = new MemoObject ( context ).setupExistingData ( id, body, margin_left, margin_top );
+            memoList.add ( memo );
+            layout.addView ( memo );
+        }
+
+        Log.d ( "MemoObjectList", "memoList size=" + memoList.size() );
+    }
 
 
 
@@ -75,27 +116,46 @@ public class MemoObjectList {
         private RelativeLayout.LayoutParams memoLayoutParams;
 
         // オブジェクトの配置 x軸（左端）
-        private int putX = DEFAULT_X;
+        private int putX;
         public void setPutX ( int x ) { this.putX = x; }
 
         // オブジェクトの配置 y軸（上端）
-        private int putY = DEFAULT_Y;
+        private int putY;
         public void setPutY ( int y ) { this.putY = y; }
 
         private final static int PADDING_VERTICAL = 20;
         private final static int PADDING_HORIZONTAL = 30;
 
 
+        private int memoNum;
+        public int getMemoNum () { return this.memoNum; }
 
 
-        MemoObject setupNewInstance ( String text ) {
+        MemoObject setupExistingData ( int id, String body, int margin_left, int margin_top ) {
+            Log.d ( "MemoObject", "Set up the existing Data" );
+            this.memoNum = id;
+            return setupNewInstance ( body, margin_left, margin_top );
+        }
+
+
+        /**
+         * 新しくメモを作成する。
+         * @param text          メモの内容
+         * @param margin_left
+         * @param margin_top
+         * @return
+         */
+        MemoObject setupNewInstance ( String text, int margin_left, int margin_top ) {
             Log.d ( "MemoObject", "Create New MemoObject" );
 
             memoLayoutParams = new RelativeLayout.LayoutParams (
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             );
+
+            putX = margin_left;     putY = margin_top;
             memoLayoutParams.setMargins ( this.putX, this.putY, 0, 0 );
+
 
             this.setBackgroundResource ( R.drawable.memo_drawable );
             this.setLayoutParams ( memoLayoutParams );
@@ -111,6 +171,11 @@ public class MemoObjectList {
 
             return this;
         }
+
+
+
+
+
 
 
 
